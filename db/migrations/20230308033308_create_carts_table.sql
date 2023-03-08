@@ -4,7 +4,7 @@ CREATE TABLE carts(
     user_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity int UNSIGNED NOT NULL,
-    price DECIMAL(12, [4]) NOT NULL,
+    price DECIMAL(12, 4) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT carts_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id),
