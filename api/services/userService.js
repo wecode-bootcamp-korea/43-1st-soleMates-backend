@@ -13,7 +13,8 @@ const signUp = async (email, password, name) => {
   await checkValidation.checkValidationEmail(email);
   await checkValidation.checkValidationPassword(password);
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   const user = await userDao.createUser(email, hashedPassword, name);
 
