@@ -36,7 +36,48 @@ const checkSignedEmail = async (email) => {
   return !!parseInt(result.signed);
 };
 
+const userPasswordByEmail = async (email) => {
+  try {
+    const [result] = await dataSource.query(
+      `SELECT
+        password
+      FROM
+        users
+      WHERE
+        email=?
+      `,
+      [email]
+    );
+
+    return result.password;
+  } catch (error) {
+    error.statusCode = 400;
+    throw error;
+  }
+};
+
+const userIdByEmail = async (email) => {
+  try {
+    const [result] = await dataSource.query(
+      `SELECT
+        id
+      FROM
+        users
+      WHERE
+        email=?
+      `,
+      [email]
+    );
+    return result.id;
+  } catch (error) {
+    error.statusCode = 400;
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   checkSignedEmail,
+  userPasswordByEmail,
+  userIdByEmail,
 };
