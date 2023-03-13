@@ -24,24 +24,24 @@ const signUp = async (email, password, name) => {
 
 const signIn = async (email, password) => {
   try {
-    const hashedPassword = await userDao.userPasswordByEmail(email);
+    const userInfo = await userDao.getUserByEmail(email);
+    const hashedPassword = await userInfo.password;
 
     if (!hashedPassword) {
       const error = new Error("EMAIL_NOT_FOUND");
       error.statusCode = 404;
       throw error;
     }
-    const checkHash = await bcrypt.compare(password, hashedPassword);
+    const checkHash = bcrypt.compare(password, hashedPassword);
     if (!checkHash) {
       const error = new Error("WRONG_PASSWORD");
       error.statusCode = 400;
       throw error;
     }
-    const userId = await userDao.userIdByEmail(email);
-    const secretKey = process.env.SECRET_KEY;
-    const payLoad = { id: userId };
-    const jwtToken = jwt.sign(payLoad, secretKey);
-    return jwtToken;
+    const userId = await userInfo.id;
+    const token = jwt.sign({ id: userId }, process.env.SECRET_KEY);
+
+    return token;
   } catch (error) {
     console.log(error);
     throw new Error("FAILED_TO_LOGIN");
