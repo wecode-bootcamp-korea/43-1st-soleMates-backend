@@ -23,29 +23,25 @@ const signUp = async (email, password, name) => {
 };
 
 const signIn = async (email, password) => {
-  try {
-    const userInfo = await userDao.getUserByEmail(email);
-    const hashedPassword = await userInfo.password;
+  const userInfo = await userDao.getUserByEmail(email);
+  const hashedPassword = userInfo.password;
 
-    if (!hashedPassword) {
-      const error = new Error("EMAIL_NOT_FOUND");
-      error.statusCode = 404;
-      throw error;
-    }
-    const checkHash = bcrypt.compare(password, hashedPassword);
-    if (!checkHash) {
-      const error = new Error("WRONG_PASSWORD");
-      error.statusCode = 400;
-      throw error;
-    }
-    const userId = await userInfo.id;
-    const token = jwt.sign({ id: userId }, process.env.SECRET_KEY);
-
-    return token;
-  } catch (error) {
-    console.log(error);
-    throw new Error("FAILED_TO_LOGIN");
+  if (!userInfo) {
+    const error = new Error("EMAIL_NOT_FOUND");
+    error.statusCode = 404;
+    throw error;
   }
+  const checkHash = await bcrypt.compare(password, hashedPassword);
+  if (!checkHash) {
+    const error = new Error("WRONG_PASSWORD");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const userId = userInfo.id;
+  const token = await jwt.sign({ id: userId }, process.env.SECRET_KEY);
+
+  return token;
 };
 
 module.exports = {
