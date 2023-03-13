@@ -1,9 +1,8 @@
 const dataSource = require("./dataSource");
 
 const createUser = async (email, password, name) => {
-  try {
-    return await dataSource.query(
-      `INSERT INTO users(
+  return await dataSource.query(
+    `INSERT INTO users(
         email,
         password,
         name
@@ -12,13 +11,8 @@ const createUser = async (email, password, name) => {
         ?,
         ?
         )`,
-      [email, password, name]
-    );
-  } catch (error) {
-    error.message;
-    error.statusCode = 400;
-    throw error;
-  }
+    [email, password, name]
+  );
 };
 
 const checkSignedEmail = async (email) => {
@@ -36,7 +30,24 @@ const checkSignedEmail = async (email) => {
   return !!parseInt(result.signed);
 };
 
+const getUserByEmail = async (email) => {
+  const [result] = await dataSource.query(
+    `SELECT
+        id,
+        password,
+        name
+      FROM
+        users
+      WHERE
+        email=?
+      `,
+    [email]
+  );
+  return result;
+};
+
 module.exports = {
   createUser,
   checkSignedEmail,
+  getUserByEmail,
 };

@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const { userDao } = require("../models");
 const checkValidation = require("../utils/check-validation");
@@ -21,6 +22,29 @@ const signUp = async (email, password, name) => {
   return user;
 };
 
+const signIn = async (email, password) => {
+  const userInfo = await userDao.getUserByEmail(email);
+  const hashedPassword = userInfo.password;
+
+  if (!userInfo) {
+    const error = new Error("EMAIL_NOT_FOUND");
+    error.statusCode = 404;
+    throw error;
+  }
+  const checkHash = await bcrypt.compare(password, hashedPassword);
+  if (!checkHash) {
+    const error = new Error("WRONG_PASSWORD");
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const userId = userInfo.id;
+  const token = await jwt.sign({ id: userId }, process.env.SECRET_KEY);
+
+  return token;
+};
+
 module.exports = {
   signUp,
+  signIn,
 };
