@@ -1,7 +1,5 @@
 const checkValidationEmail = (email) => {
-  const emailRegex = new RegExp(
-    /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
-  );
+  const emailRegex = new RegExp(/[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-z]{2,3}$/);
   if (!emailRegex.test(email)) {
     const error = new Error("INVALID_EMAIL");
     error.statusCode = 400;
