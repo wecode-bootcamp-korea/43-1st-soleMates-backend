@@ -6,7 +6,7 @@ const ALLproductList = async () => {
 
 const productList = async (categoryname, size, color) => {
   let categorycondition = "";
-  categorycondition += categoryname;
+  categorycondition = "cate.name =" + categoryname;
   console.log(categorycondition);
 
   if (categoryname) size = size.split(",");
@@ -33,6 +33,11 @@ const productList = async (categoryname, size, color) => {
   }
   colorcondition = "c.name IN (" + colormult + ")";
 
+  let categoryAndCondition = "";
+  if (size || color) {
+    categoryAndCondition = " AND ";
+  }
+
   let andCondition = "";
   if (size && color) {
     andCondition = " AND ";
@@ -49,6 +54,8 @@ const productList = async (categoryname, size, color) => {
         LEFT JOIN product_colors pc ON pc.product_id = p.id
         LEFT JOIN colors c ON c.id = pc.color_id
         WHERE
+        ${categorycondition}
+        ${categoryAndCondition}
         ${sizecondition}
         ${andCondition}
         ${colorcondition}
