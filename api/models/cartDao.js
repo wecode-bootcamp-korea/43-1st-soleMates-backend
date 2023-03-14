@@ -1,7 +1,7 @@
 const dataSource = require("./dataSource");
 
 const createCart = async (userId, productId, quantity, price) => {
-  return await dataSource.query(
+  return dataSource.query(
     `INSERT INTO carts(
       user_id,
       product_id,
@@ -13,9 +13,9 @@ const createCart = async (userId, productId, quantity, price) => {
       ?,
       ?
     ) ON DUPLICATE KEY UPDATE
-      quantity = quantity + ${quantity}
+      quantity = quantity + ?
       `,
-    [userId, productId, quantity, price]
+    [userId, productId, quantity, price, quantity]
   );
 };
 

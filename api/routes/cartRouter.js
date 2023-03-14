@@ -5,6 +5,6 @@ const { checkToken } = require("../middlewares/auth");
 
 const router = express.Router();
 
-router.post("/", checkToken, cartController.createCart);
+router.post("", checkToken, cartController.createCart);
 
 module.exports = router;
