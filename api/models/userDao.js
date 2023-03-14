@@ -46,8 +46,24 @@ const getUserByEmail = async (email) => {
   return result;
 };
 
+const checkSignedUserId = async (userId) => {
+  const [result] = await dataSource.query(
+    `SELECT EXISTS(
+      SELECT
+        id
+      FROM
+        users
+      WHERE
+        id=?
+    ) as signed`,
+    [userId]
+  );
+  return !!parseInt(result.signed);
+};
+
 module.exports = {
   createUser,
   checkSignedEmail,
   getUserByEmail,
+  checkSignedUserId,
 };
