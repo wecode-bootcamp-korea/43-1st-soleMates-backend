@@ -19,6 +19,20 @@ const createCart = async (userId, productId, quantity, price) => {
   );
 };
 
+const updateCart = async (userId, cartId, quantity, price) => {
+  return dataSource.query(
+    `UPDATE 
+      carts
+     SET
+      quantity = ?,
+      price = ?
+     WHERE id = ?
+    `,
+    [quantity, price, cartId]
+  );
+};
+
 module.exports = {
   createCart,
+  updateCart,
 };
