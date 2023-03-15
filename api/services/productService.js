@@ -7,12 +7,12 @@ const productList = async (categoryname, size, color) => {
   return productDao.productList(categoryname, size, color);
 };
 
-const getProductId = async (productId) => {
-  return productDao.getProductId(productId);
+const getProductDetailById = async (productId) => {
+  return productDao.getProductDetailById(productId);
 };
 
 module.exports = {
   allProductList,
   productList,
-  getProductId,
+  getProductDetailById,
 };

@@ -73,10 +73,9 @@ const productList = async (categoryname, size, color) => {
   );
 };
 
-const getProductId = async (productId) => {
+const getProductDetailById = async (productId) => {
   const detailProduct = await dataSource.query(
-    `SELECT 
-      p.id, p.name, p.description, p.price, p.quantity, p.description, pi.images
+    `SELECT p.id, p.name, p.description, p.price, p.quantity, p.description, pi.images
       FROM products p
       LEFT JOIN (
             SELECT 
@@ -123,5 +122,5 @@ const getProductId = async (productId) => {
 module.exports = {
   allProductList,
   productList,
-  getProductId,
+  getProductDetailById,
 };

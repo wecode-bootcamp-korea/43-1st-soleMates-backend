@@ -17,10 +17,10 @@ const productList = catchAsync(async (req, res) => {
   });
 });
 
-const getProductId = catchAsync(async (req, res) => {
+const getProductDetailById = catchAsync(async (req, res) => {
   const { productId } = req.params;
 
-  const detail = await productService.getProductId(productId);
+  const detail = await productService.getProductDetailById(productId);
 
   return res.status(200).json({
     data: detail,
@@ -30,5 +30,5 @@ const getProductId = catchAsync(async (req, res) => {
 module.exports = {
   allProductList,
   productList,
-  getProductId,
+  getProductDetailById,
 };
