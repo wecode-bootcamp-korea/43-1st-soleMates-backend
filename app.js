@@ -30,6 +30,6 @@ app.get("/ping", (req, res) => {
   res.status(200).json({ message: "pong" });
 });
 
-app.listen(PORT, "127.0.0.1", () => {
+app.listen(PORT, () => {
   console.log(`🚀🚀🚀 Server Listening to request on 127.0.0.1:${PORT} 🚀🚀🚀`);
 });
