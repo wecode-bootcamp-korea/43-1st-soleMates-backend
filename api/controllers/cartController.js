@@ -24,7 +24,7 @@ const deleteCart = catchAsync(async (req, res) => {
     throw error;
   }
   await cartService.deleteCart(userId, cartId);
-  return res.status(204).json({ message: `SUCCESSFULLY_DELETE_CART` });
+  return res.status(204).send();
 });
 
 module.exports = {
