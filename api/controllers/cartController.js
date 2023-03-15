@@ -17,12 +17,6 @@ const createCart = catchAsync(async (req, res) => {
 const getCart = catchAsync(async (req, res) => {
   const userId = req.user;
 
-  if (!userId) {
-    const error = new Error("KEY_ERROR");
-    error.statusCode = 400;
-    throw error;
-  }
-
   const cartData = await cartService.getCart(userId);
   return res.status(201).json({ cartData });
 });
