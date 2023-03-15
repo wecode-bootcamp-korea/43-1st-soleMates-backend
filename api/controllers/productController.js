@@ -17,7 +17,18 @@ const productList = catchAsync(async (req, res) => {
   });
 });
 
+const getProductDetailById = catchAsync(async (req, res) => {
+  const { productId } = req.params;
+
+  const detail = await productService.getProductDetailById(productId);
+
+  return res.status(200).json({
+    data: detail,
+  });
+});
+
 module.exports = {
   allProductList,
   productList,
+  getProductDetailById,
 };
