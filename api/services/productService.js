@@ -1,6 +1,6 @@
 const { productDao } = require("../models");
-const ALLproductList = async () => {
-  return await productDao.ALLproductList();
+const allProductList = async () => {
+  return await productDao.allProductList();
 };
 
 const productList = async (categoryname, size, color) => {
@@ -8,6 +8,6 @@ const productList = async (categoryname, size, color) => {
 };
 
 module.exports = {
-  ALLproductList,
+  allProductList,
   productList,
 };
