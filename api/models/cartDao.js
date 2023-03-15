@@ -19,6 +19,16 @@ const createCart = async (userId, productId, quantity, price) => {
   );
 };
 
+const deleteCart = async (userId, cartId) => {
+  return dataSource.query(
+    `DELETE FROM carts
+    WHERE id = ?
+    `,
+    [cartId]
+  );
+};
+
 module.exports = {
   createCart,
+  deleteCart,
 };

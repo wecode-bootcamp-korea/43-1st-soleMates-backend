@@ -7,4 +7,6 @@ const router = express.Router();
 
 router.post("", checkToken, cartController.createCart);
 
+router.delete("", checkToken, cartController.deleteCart);
+
 module.exports = router;
