@@ -1,7 +1,11 @@
 const dataSource = require("./dataSource");
 
 const allProductList = async () => {
-  return await dataSource.query(`SELECT * FROM products`);
+  return await dataSource.query(`
+  SELECT DISTINCT(p.id), p.name, p.price, pi.image_url as image_url,
+  FROM products as p
+  LEFT JOIN product_images pi ON pi.product_id = p.id
+  `);
 };
 
 const productList = async (categoryname, size, color) => {
