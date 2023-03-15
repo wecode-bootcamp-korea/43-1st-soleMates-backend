@@ -2,9 +2,15 @@ const dataSource = require("./dataSource");
 
 const allProductList = async () => {
   return await dataSource.query(`
-  SELECT DISTINCT(p.id), p.name, p.price, pi.image_url as image_url,
-  FROM products as p
-  LEFT JOIN product_images pi ON pi.product_id = p.id
+  SELECT DISTINCT
+     (p.id), 
+     p.name, 
+     p.price, 
+     pi.image_url as image_url,
+  FROM 
+     products as p
+  LEFT JOIN 
+     product_images pi ON pi.product_id = p.id
   `);
 };
 
@@ -53,31 +59,58 @@ const productList = async (categoryname, size, color) => {
   }
 
   return await dataSource.query(
-    `SELECT DISTINCT(p.id), p.name, p.price, pi.image_url as image_url, cate.name as categories
-        FROM products p
-          LEFT JOIN product_images pi ON pi.product_id = p.id
-          LEFT JOIN product_categories pcate ON pcate.product_id = p.id
-          LEFT JOIN categories cate ON cate.id = pcate.category_id
-          LEFT JOIN product_sizes ps ON ps.product_id = p.id
-          LEFT JOIN sizes s ON s.id = ps.size_id
-          LEFT JOIN product_colors pc ON pc.product_id = p.id
-          LEFT JOIN colors c ON c.id = pc.color_id
-        WHERE
+    `SELECT DISTINCT
+       (p.id), 
+       p.name, 
+       p.price, 
+       pi.image_url as image_url, 
+       cate.name as categories
+     FROM 
+        products p
+     LEFT JOIN 
+        product_images pi ON pi.product_id = p.id
+     LEFT JOIN 
+        product_categories pcate ON pcate.product_id = p.id
+     LEFT JOIN 
+        categories cate ON cate.id = pcate.category_id
+     LEFT JOIN 
+        product_sizes ps ON ps.product_id = p.id
+     LEFT JOIN 
+        sizes s ON s.id = ps.size_i    
+     LEFT JOIN 
+        product_colors pc ON pc.product_id = p.id
+     LEFT JOIN 
+        colors c ON c.id = pc.color_id
+     WHERE
         ${categorycondition}
         ${categoryAndCondition}
         ${sizecondition}
         ${andCondition}
         ${colorcondition}
-        GROUP BY p.id, p.name, p.price, s.name, pi.image_url, cate.name;
+     GROUP BY 
+        p.id, 
+        p.name, 
+        p.price, 
+        s.name, 
+        pi.image_url, 
+        cate.name;
         `
   );
 };
 
 const getProductDetailById = async (productId) => {
   const detailProduct = await dataSource.query(
-    `SELECT p.id, p.name, p.description, p.price, p.quantity, p.description, pi.images
-      FROM products p
-      LEFT JOIN (
+    `SELECT 
+       p.id, 
+       p.name, 
+       p.description, 
+       p.price, 
+       p.quantity, 
+       p.description, 
+       pi.images
+     FROM 
+       products p
+     LEFT JOIN (
             SELECT 
               product_id, 
               JSON_ARRAYAGG(
@@ -87,7 +120,10 @@ const getProductDetailById = async (productId) => {
                   'name', name
                 )
               ) AS images 
-            FROM product_images GROUP BY product_id
+            FROM 
+              product_images 
+            GROUP BY 
+              product_id
           ) AS pi ON pi.product_id = p.id
       WHERE p.id = ?
       `,
@@ -95,22 +131,40 @@ const getProductDetailById = async (productId) => {
   );
 
   const detailSize = await dataSource.query(
-    `SELECT s.id, s.name as size
-    FROM products p
-    LEFT JOIN product_sizes ps ON ps.product_id = p.id
-    LEFT JOIN sizes s ON s.id = ps.size_id
-    WHERE p.id = ?
-    GROUP BY p.id, s.id, s.name;`,
+    `SELECT 
+       s.id, 
+       s.name as size
+     FROM 
+       products p
+     LEFT JOIN 
+       product_sizes ps ON ps.product_id = p.id
+     LEFT JOIN 
+       sizes s ON s.id = ps.size_id
+     WHERE 
+       p.id = ?
+     GROUP BY 
+       p.id, 
+       s.id, 
+       s.name;`,
     [productId]
   );
 
   const detailColor = await dataSource.query(
-    `SELECT c.id, c.name as color
-    FROM products p
-    LEFT JOIN product_colors pc ON pc.product_id = p.id
-    LEFT JOIN colors c ON c.id = pc.color_id
-    WHERE p.id = ?
-    GROUP BY p.id, c.id, c.name`,
+    `SELECT 
+       c.id, 
+       c.name as color
+     FROM 
+       products p
+     LEFT JOIN 
+       product_colors pc ON pc.product_id = p.id
+     LEFT JOIN 
+       colors c ON c.id = pc.color_id
+     WHERE 
+       p.id = ?
+     GROUP BY 
+       p.id, 
+       c.id, 
+       c.name`,
     [productId]
   );
   detailProduct[0].size = detailSize;
