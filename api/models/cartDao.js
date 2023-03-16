@@ -19,6 +19,15 @@ const createCart = async (userId, productId, quantity, price) => {
   );
 };
 
+const deleteCart = async (userId, cartId) => {
+  return dataSource.query(
+    `DELETE FROM carts
+    WHERE id IN (?)
+    `,
+    [cartId]
+  );
+};
+
 const updateCart = async (userId, cartId, quantity, price) => {
   await dataSource.query(
     `UPDATE 
@@ -69,6 +78,7 @@ const getCart = async (userId) => {
 
 module.exports = {
   createCart,
+  deleteCart,
   updateCart,
   getCart,
 };
