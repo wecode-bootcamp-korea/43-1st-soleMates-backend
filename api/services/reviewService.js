@@ -1,7 +1,7 @@
 const { reviewDao } = require("../models");
 
-const reviewList = async (productId) => {
-  return reviewDao.reviewList(productId);
+const getReviewList = async (productId) => {
+  return reviewDao.getReviewList(productId);
 };
 
 const createReview = async (userId, productId, comment, rating) => {
@@ -23,6 +23,6 @@ const createReview = async (userId, productId, comment, rating) => {
 };
 
 module.exports = {
-  reviewList,
+  getReviewList,
   createReview,
 };

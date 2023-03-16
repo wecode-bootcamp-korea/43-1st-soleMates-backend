@@ -1,9 +1,9 @@
 const { reviewService } = require("../services");
 const { catchAsync } = require("../utils/error");
 
-const reviewList = catchAsync(async (req, res) => {
+const getReviewList = catchAsync(async (req, res) => {
   const { productId } = req.params;
-  const list = await reviewService.reviewList(productId);
+  const list = await reviewService.getReviewList(productId);
 
   return res.status(200).json({ data: list });
 });
@@ -22,6 +22,6 @@ const createReview = catchAsync(async (req, res) => {
 });
 
 module.exports = {
-  reviewList,
+  getReviewList,
   createReview,
 };

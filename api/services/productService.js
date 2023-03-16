@@ -1,10 +1,10 @@
 const { productDao } = require("../models");
-const allProductList = async () => {
-  return await productDao.allProductList();
+const getAllProductList = async () => {
+  return await productDao.getAllProductList();
 };
 
-const productList = async (categoryname, size, color) => {
-  return productDao.productList(categoryname, size, color);
+const getProductList = async (categoryname, size, color) => {
+  return productDao.getProductList(categoryname, size, color);
 };
 
 const getProductDetailById = async (productId) => {
@@ -12,7 +12,7 @@ const getProductDetailById = async (productId) => {
 };
 
 module.exports = {
-  allProductList,
-  productList,
+  getAllProductList,
+  getProductList,
   getProductDetailById,
 };

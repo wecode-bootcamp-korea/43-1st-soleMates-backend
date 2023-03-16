@@ -1,6 +1,6 @@
 const dataSource = require("./dataSource");
 
-const allProductList = async () => {
+const getAllProductList = async () => {
   return await dataSource.query(`
   SELECT DISTINCT
      (p.id), 
@@ -14,7 +14,7 @@ const allProductList = async () => {
   `);
 };
 
-const productList = async (categoryname, size, color) => {
+const getProductList = async (categoryname, size, color) => {
   let categorycondition = "";
   if (categoryname) {
     categorycondition = "cate.name =" + categoryname;
@@ -159,7 +159,7 @@ const getProductDetailById = async (productId) => {
 };
 
 module.exports = {
-  allProductList,
-  productList,
+  getAllProductList,
+  getProductList,
   getProductDetailById,
 };

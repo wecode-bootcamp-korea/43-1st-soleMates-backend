@@ -1,6 +1,6 @@
 const dataSource = require("./dataSource");
 
-const reviewList = async (productId) => {
+const getReviewList = async (productId) => {
   return dataSource.query(
     `
     SELECT
@@ -61,7 +61,7 @@ const createReview = async (userId, productId, comment, rating, orderId) => {
 };
 
 module.exports = {
-  reviewList,
+  getReviewList,
   createReview,
   checkOrderId,
 };
