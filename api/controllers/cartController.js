@@ -6,7 +6,7 @@ const createCart = catchAsync(async (req, res) => {
   const { productId, quantity, price } = req.body;
 
   if (!userId || !productId || !quantity || !price) {
-    const error = new Error("KEY ERROR");
+    const error = new Error("KEY_ERROR");
     error.statuscode = 400;
     throw error;
   }
@@ -16,7 +16,7 @@ const createCart = catchAsync(async (req, res) => {
 
 const deleteCart = catchAsync(async (req, res) => {
   const userId = req.user;
-  const { cartId } = req.body;
+  const { cartId } = req.query;
 
   if (!userId || !cartId) {
     const error = new Error("KEY_ERROR");
@@ -27,7 +27,36 @@ const deleteCart = catchAsync(async (req, res) => {
   return res.status(204).send();
 });
 
+const updateCart = catchAsync(async (req, res) => {
+  const userId = req.user;
+  const { cartId, quantity, price } = req.body;
+
+  if (!userId || !cartId || !quantity || !price) {
+    const error = new Error("KEY_ERROR");
+    error.statusCode = 400;
+    throw error;
+  }
+  const cartData = await cartService.updateCart(
+    userId,
+    cartId,
+    quantity,
+    price
+  );
+  return res
+    .status(201)
+    .json({ message: "SUCCESSFULLY_UPDATE_CART", cartData });
+});
+
+const getCart = catchAsync(async (req, res) => {
+  const userId = req.user;
+
+  const cartData = await cartService.getCart(userId);
+  return res.status(200).json({ cartData });
+});
+
 module.exports = {
   createCart,
   deleteCart,
+  updateCart,
+  getCart,
 };
