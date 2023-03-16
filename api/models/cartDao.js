@@ -20,7 +20,7 @@ const createCart = async (userId, productId, quantity, price) => {
 };
 
 const updateCart = async (userId, cartId, quantity, price) => {
-  return dataSource.query(
+  await dataSource.query(
     `UPDATE 
       carts
      SET
@@ -29,6 +29,19 @@ const updateCart = async (userId, cartId, quantity, price) => {
      WHERE id = ?
     `,
     [quantity, price, cartId]
+  );
+
+  return dataSource.query(
+    `SELECT
+      id AS cart_id,
+      user_id,
+      product_id,
+      quantity,
+      price
+    FROM carts
+    WHERE id = ?
+    `,
+    [cartId]
   );
 };
 

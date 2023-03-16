@@ -17,7 +17,7 @@ const createCart = catchAsync(async (req, res) => {
 const updateCart = catchAsync(async (req, res) => {
   const userId = req.user;
   const { cartId, quantity, price } = req.body;
-  console.log(userId, cartId, quantity, price);
+
   if (!userId || !cartId || !quantity || !price) {
     const error = new Error("KEY_ERROR");
     error.statusCode = 400;
