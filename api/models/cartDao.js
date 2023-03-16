@@ -19,6 +19,32 @@ const createCart = async (userId, productId, quantity, price) => {
   );
 };
 
+const updateCart = async (userId, cartId, quantity, price) => {
+  await dataSource.query(
+    `UPDATE 
+      carts
+     SET
+      quantity = ?,
+      price = ?
+     WHERE id = ?
+    `,
+    [quantity, price, cartId]
+  );
+
+  return dataSource.query(
+    `SELECT
+      id AS cart_id,
+      user_id,
+      product_id,
+      quantity,
+      price
+    FROM carts
+    WHERE id = ?
+    `,
+    [cartId]
+  );
+};
+
 const getCart = async (userId) => {
   return dataSource.query(
     `SELECT
@@ -43,5 +69,6 @@ const getCart = async (userId) => {
 
 module.exports = {
   createCart,
+  updateCart,
   getCart,
 };
