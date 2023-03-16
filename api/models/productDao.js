@@ -32,54 +32,41 @@ const productList = async (categoryname, size, color) => {
 
   let sizecondition = "";
   if (size) {
-    size = size.split(",");
-    let sizemult = size[0];
-    if (size.length > 1) {
-      for (let i = 1; i < size.length; i++) {
-        sizemult += "," + size[i];
-      }
-    } else {
-      sizecondition = "s.name IN (" + size[0] + ")";
-    }
-    sizecondition = "s.name IN (" + sizemult + ")";
+    sizecondition = `s.name IN (${size})`;
   }
 
   let colorcondition = "";
   if (color) {
-    color = color.split(",");
-    let colormult = color[0];
-    if (color.length > 1) {
-      for (let i = 1; i < color.length; i++) {
-        colormult += "," + color[i];
-      }
-    } else {
-      colorcondition = "c.name IN (" + color[0] + ")";
-    }
-    colorcondition = "c.name IN (" + colormult + ")";
+    colorcondition = `c.name IN (${color})`;
   }
 
   return await dataSource.query(
-    `SELECT DISTINCT
-       (p.id), 
-       p.name, 
-       p.price, 
-       pi.image_url as image_url, 
-       cate.name as categories
+    `SELECT 
+        p.id, 
+        p.name, 
+        p.price,  
+        cate.name as categories,
+        (
+          SELECT JSON_ARRAYAGG(image_url)
+          FROM (
+              SELECT DISTINCT image_url
+              FROM product_images
+              WHERE product_id = p.id
+               ) AS t
+           ) as image_url
      FROM 
         products p
-     LEFT JOIN 
-        product_images pi ON pi.product_id = p.id
-     LEFT JOIN 
+     JOIN 
         product_categories pcate ON pcate.product_id = p.id
-     LEFT JOIN 
+     JOIN 
         categories cate ON cate.id = pcate.category_id
-     LEFT JOIN 
+     JOIN  
         product_sizes ps ON ps.product_id = p.id
-     LEFT JOIN 
-        sizes s ON s.id = ps.size_i    
-     LEFT JOIN 
+     JOIN  
+        sizes s ON s.id = ps.size_id    
+     JOIN  
         product_colors pc ON pc.product_id = p.id
-     LEFT JOIN 
+     JOIN 
         colors c ON c.id = pc.color_id
      WHERE
         ${categorycondition}
@@ -90,10 +77,8 @@ const productList = async (categoryname, size, color) => {
      GROUP BY 
         p.id, 
         p.name, 
-        p.price, 
-        s.name, 
-        pi.image_url, 
-        cate.name;
+        p.price,
+        cate.name
         `
   );
 };

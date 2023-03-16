@@ -1,7 +1,7 @@
 const dataSource = require("./dataSource");
 
 const reviewList = async (productId) => {
-  return await dataSource.query(
+  return dataSource.query(
     `
     SELECT
         pr.id,
@@ -12,7 +12,7 @@ const reviewList = async (productId) => {
         pri.image
     FROM
         product_reviews AS pr
-    LEFT JOIN
+    JOIN
         users AS u ON u.id = pr.user_id
     LEFT JOIN
         product_review_images AS pri ON pri.id = pr.image_id
@@ -20,6 +20,20 @@ const reviewList = async (productId) => {
         product_id = ?
         `,
     [productId]
+  );
+};
+
+const checkOrderId = async (userId, productId) => {
+  return dataSource.query(
+    `SELECT id
+         FROM payments
+         WHERE cart_id = (
+                SELECT id
+                FROM carts
+                WHERE user_id = ? AND product_id = ?
+                )
+        `,
+    [userId, productId]
   );
 };
 
@@ -49,14 +63,15 @@ const createReview = async (userId, productId, comment, rating) => {
             ?,
             ?,
             ?,
-            ${findOrderId}  
+            ?  
       )
         `,
-    [userId, productId, comment, rating]
+    [userId, productId, comment, rating, findOrderId]
   );
 };
 
 module.exports = {
   reviewList,
   createReview,
+  checkOrderId,
 };
