@@ -24,7 +24,7 @@ const reviewList = async (productId) => {
 };
 
 const checkOrderId = async (userId, productId) => {
-  return dataSource.query(
+  const [result] = await dataSource.query(
     `SELECT id
          FROM payments
          WHERE cart_id = (
@@ -35,21 +35,11 @@ const checkOrderId = async (userId, productId) => {
         `,
     [userId, productId]
   );
+
+  return result;
 };
 
-const createReview = async (userId, productId, comment, rating) => {
-  const findOrderId = dataSource.query(
-    `SELECT id
-         FROM payments
-         WHERE cart_id = (
-                SELECT id
-                FROM carts
-                WHERE user_id = ? AND product_id = ?
-                )
-        `,
-    [userId, productId]
-  );
-
+const createReview = async (userId, productId, comment, rating, orderId) => {
   return dataSource.query(
     `INSERT INTO 
         product_reviews(
@@ -66,7 +56,7 @@ const createReview = async (userId, productId, comment, rating) => {
             ?  
       )
         `,
-    [userId, productId, comment, rating, findOrderId]
+    [userId, productId, comment, rating, orderId]
   );
 };
 
