@@ -6,7 +6,7 @@ const createCart = catchAsync(async (req, res) => {
   const { productId, quantity, price } = req.body;
 
   if (!userId || !productId || !quantity || !price) {
-    const error = new Error("KEY ERROR");
+    const error = new Error("KEY_ERROR");
     error.statuscode = 400;
     throw error;
   }
@@ -36,7 +36,15 @@ const updateCart = catchAsync(async (req, res) => {
     .json({ message: "SUCCESSFULLY_UPDATE_CART", cartData });
 });
 
+const getCart = catchAsync(async (req, res) => {
+  const userId = req.user;
+
+  const cartData = await cartService.getCart(userId);
+  return res.status(200).json({ cartData });
+});
+
 module.exports = {
   createCart,
   updateCart,
+  getCart,
 };
