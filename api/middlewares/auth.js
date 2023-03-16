@@ -4,6 +4,7 @@ const userDao = require("../models/userDao");
 const checkToken = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
+
     if (!token) {
       const error = new Error("NOT_EXIST_TOKEN");
       throw error;
